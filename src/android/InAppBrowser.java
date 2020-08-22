@@ -534,7 +534,8 @@ public class InAppBrowser extends CordovaPlugin {
                 //final WebView childView = inAppWebView;
                 // The JS protects against multiple calls, so this should happen only when
                 // closeDialog() is called by other native code.
-                if (childView == null) {
+                if (inAppWebView == null) {
+                    emitWarning(WRN_UNEXPECTED, "Close called but already closed.");
                     return;
                 }
                 inAppWebView.setWebViewClient(new WebViewClient() {
