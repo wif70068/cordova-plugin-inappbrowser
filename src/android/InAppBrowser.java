@@ -535,7 +535,7 @@ public class InAppBrowser extends CordovaPlugin {
                 // The JS protects against multiple calls, so this should happen only when
                 // closeDialog() is called by other native code.
                 if (inAppWebView == null) {
-                    emitWarning(WRN_UNEXPECTED, "Close called but already closed.");
+                    //emitWarning(WRN_UNEXPECTED, "Close called but already closed.");
                     return;
                 }
                 inAppWebView.setWebViewClient(new WebViewClient() {
@@ -562,7 +562,7 @@ public class InAppBrowser extends CordovaPlugin {
                     obj.put("type", EXIT_EVENT);
                     sendUpdate(obj, false);
                 } catch (JSONException ex) {
-                    LOG.d(LOG_TAG, "Should never happen");
+                    //LOG.d(LOG_TAG, "Should never happen");
                 }
             }
         });
