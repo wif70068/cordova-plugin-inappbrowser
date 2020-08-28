@@ -358,7 +358,7 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onPause(boolean multitasking) {
-        if (shouldPauseInAppBrowser) {
+        if (inAppWebView != null && shouldPauseInAppBrowser) {
             inAppWebView.onPause();
         }
     }
@@ -368,7 +368,7 @@ public class InAppBrowser extends CordovaPlugin {
      */
     @Override
     public void onResume(boolean multitasking) {
-        if (shouldPauseInAppBrowser) {
+        if (inAppWebView != null && shouldPauseInAppBrowser) {
             inAppWebView.onResume();
         }
     }
@@ -572,7 +572,7 @@ public class InAppBrowser extends CordovaPlugin {
      * Checks to see if it is possible to go back one page in history, then does so.
      */
     public void goBack() {
-        if (this.inAppWebView.canGoBack()) {
+        if (this.inAppWebView != null && this.inAppWebView.canGoBack()) {
             this.inAppWebView.goBack();
         }
     }
@@ -582,7 +582,7 @@ public class InAppBrowser extends CordovaPlugin {
      * @return boolean
      */
     public boolean canGoBack() {
-        return this.inAppWebView.canGoBack();
+        return this.inAppWebView != null && this.inAppWebView.canGoBack();
     }
 
     /**
@@ -597,7 +597,7 @@ public class InAppBrowser extends CordovaPlugin {
      * Checks to see if it is possible to go forward one page in history, then does so.
      */
     private void goForward() {
-        if (this.inAppWebView.canGoForward()) {
+        if (this.inAppWebView != null && this.inAppWebView.canGoForward()) {
             this.inAppWebView.goForward();
         }
     }
