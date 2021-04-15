@@ -543,8 +543,8 @@ static CDVWKInAppBrowser* instance = nil;
         [self openInSystem:url];
         shouldStart = NO;
     }
-    else if ((self.callbackId != nil) && isTopLevelNavigation) {
-        // Send a loadstart event for each top-level navigation (includes redirects).
+    else if ((self.callbackId != nil)) {
+        // Send a loadstart event (includes redirects).
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsDictionary:@{@"type":@"loadstart", @"url":[url absoluteString]}];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
