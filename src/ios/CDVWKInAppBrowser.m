@@ -293,8 +293,7 @@ static CDVWKInAppBrowser* instance = nil;
     // nav.orientationDelegate = self.inAppBrowserViewController;
     // nav.navigationBarHidden = YES;
     // nav.modalPresentationStyle = self.inAppBrowserViewController.modalPresentationStyle;
-
-    nav.presentationController.delegate = self.inAppBrowserViewController;
+    // nav.presentationController.delegate = self.inAppBrowserViewController;
     
     __weak CDVWKInAppBrowser* weakSelf = self;
     
@@ -718,6 +717,9 @@ static CDVWKInAppBrowser* instance = nil;
 
 @synthesize currentURL;
 
+BOOL viewRenderedAtLeastOnce = FALSE;
+BOOL isExiting = FALSE;
+
 CGFloat lastReducedStatusBarHeight = 0.0;
 BOOL isExiting = FALSE;
 
@@ -1102,6 +1104,7 @@ BOOL isExiting = FALSE;
 
 - (void)viewDidLoad
 {
+    viewRenderedAtLeastOnce = FALSE;
     [super viewDidLoad];
 }
 
@@ -1308,7 +1311,7 @@ BOOL isExiting = FALSE;
     UILabel *label = (UILabel *)self.navigationItem.titleView;
     label.text = [self.currentURL absoluteString];
     [label sizeToFit];
-    
+
     [self.navigationDelegate didFinishNavigation:theWebView];
 }
     
