@@ -899,9 +899,6 @@ BOOL isExiting = FALSE;
       self.backButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
     }
 
-    UIBarButtonItem* fixedSpaceButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    fixedSpaceButton.width = 30;
-
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14], NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.45]};
     self.navigationItem.leftBarButtonItems = @[self.closeButton];
     self.navigationItem.rightBarButtonItems = @[self.shareButton, self.forwardButton, fixedSpaceButton, self.backButton];
