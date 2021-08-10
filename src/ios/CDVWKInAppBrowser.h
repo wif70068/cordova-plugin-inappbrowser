@@ -77,7 +77,7 @@
 - (void)setCloseButtonTitle:(NSString*)title : (NSString*) colorString : (int) buttonIndex;
 - (void)updateViews:(CDVInAppBrowserOptions*)browserOptions;
 
-- (id)initWithUserAgent:(NSString*)userAgent prevUserAgent:(NSString*)prevUserAgent browserOptions:(CDVInAppBrowserOptions*)browserOptions;
+- (id)initWithBrowserOptions: (CDVInAppBrowserOptions*) browserOptions andSettings:(NSDictionary*) settings;
 - (id)createNavigationViewContoller;
 
 @end
