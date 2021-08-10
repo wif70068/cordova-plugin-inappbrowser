@@ -87,6 +87,19 @@
 	    <header-file src="src/ios/CDVWKInAppBrowserUIDelegate.h" />
 	    <source-file src="src/ios/CDVWKInAppBrowserUIDelegate.m" />
 
+        <header-file src="src/ios/SVWebViewControllerActivity.h" />
+        <header-file src="src/ios/SVWebViewControllerActivityChrome.h" />
+        <header-file src="src/ios/SVWebViewControllerActivitySafari.h" />
+        <source-file src="src/ios/SVWebViewControllerActivity.m" />
+        <source-file src="src/ios/SVWebViewControllerActivityChrome.m" />
+        <source-file src="src/ios/SVWebViewControllerActivitySafari.m" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivityChrome-iPad.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivityChrome-iPad@2x.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivityChrome@2x.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivitySafari-iPad.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivitySafari-iPad@2x.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivitySafari@2x.png" />
+
 	    <framework src="CoreGraphics.framework" />
     </platform>
 
