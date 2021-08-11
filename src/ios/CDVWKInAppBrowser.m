@@ -960,6 +960,7 @@ BOOL isExiting = FALSE;
         nav.navigationBar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
     }
     nav.modalPresentationStyle = self.modalPresentationStyle;
+    nav.presentationController.delegate = self;
     
     return nav;
 }
