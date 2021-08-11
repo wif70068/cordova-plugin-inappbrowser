@@ -791,10 +791,11 @@ public class InAppBrowser extends CordovaPlugin {
                 return _close;
             }
 
-            private View createImageButton(int id, String res){
+            private ImageButton createImageButton(int id, String res){
+
                 Resources activityRes = cordova.getActivity().getResources();
 
-                View button = new ImageButton(cordova.getActivity());
+                ImageButton button = new ImageButton(cordova.getActivity());
                 int resId = activityRes.getIdentifier(res, "drawable", cordova.getActivity().getPackageName());
                 Drawable resIcon = activityRes.getDrawable(resId);
 
@@ -976,7 +977,7 @@ public class InAppBrowser extends CordovaPlugin {
 
                 // Close/Done button
                 int closeButtonId = 7;
-                View closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
+                ImageButton closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
                 closeButton.setContentDescription("Close Button");
                 closeButton.setPadding(0, this.doToPixels(10), 0, this.dpToPixels(10));
                 closeButton.setOnClickListener(new View.OnClickListener(){
@@ -987,7 +988,7 @@ public class InAppBrowser extends CordovaPlugin {
                 
                 // Share button
                 int shareButtonId=8;
-                View shareButton = createImageButton(shareButtonId, "ic_action_share");
+                ImageButton shareButton = createImageButton(shareButtonId, "ic_action_share");
                 shareButton.setPadding(5, this.dpToPixels(10), 5, this.dpToPixels(10));
                 shareButton.setContentDescription("Share Button");
                 shareButton.setOnClickListener(new View.OnClickListener() {
@@ -1010,8 +1011,9 @@ public class InAppBrowser extends CordovaPlugin {
                 shareLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
                 shareButton.setLayoutParams(shareLayoutParams);
                     
-                closeButtonContainer.addView(closeButton);
-                closeButtonContainer.addView(shareButton);
+                
+                closeButtonContainer.addView((View)closeButton);
+                closeButtonContainer.addView((View)shareButton);
 
                 // WebView
                 inAppWebView = new WebView(cordova.getActivity());
