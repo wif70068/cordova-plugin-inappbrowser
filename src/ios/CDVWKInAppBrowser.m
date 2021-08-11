@@ -639,6 +639,7 @@ static CDVWKInAppBrowser* instance = nil;
 
 - (void)webView:(WKWebView*)theWebView didFailNavigation:(NSError*)error
 {
+    //custom
     NSString* errorUrl = error.userInfo[NSURLErrorFailingURLStringErrorKey];
     if(errorUrl == nil){
         if(self.inAppBrowserViewController.currentURL != nil){
@@ -739,6 +740,7 @@ BOOL isExiting = FALSE;
     //NSLog(@"dealloc");
 }
 
+//custom
 - (void)updateViews:(CDVInAppBrowserOptions*)browserOptions
 {
     _browserOptions = browserOptions;
@@ -944,6 +946,7 @@ BOOL isExiting = FALSE;
     [self.view addSubview:self.spinner];
 }
 
+// custom
 - (id)createNavigationViewContoller {
     CDVInAppBrowserNavigationController *nav = [[CDVInAppBrowserNavigationController alloc] initWithRootViewController:self];
     nav.orientationDelegate = self;
@@ -1130,7 +1133,7 @@ BOOL isExiting = FALSE;
 - (void)close
 {
     self.currentURL = nil;
-    
+    //custom   
     __weak CDVWKInAppBrowserViewController* weakSelf = self;
     
     // Run later to avoid the "took a long time" log message.
@@ -1151,6 +1154,7 @@ BOOL isExiting = FALSE;
     });
 }
 
+//custom
 - (void)share
 {
     if (self.currentURL) {
@@ -1189,6 +1193,7 @@ BOOL isExiting = FALSE;
     [self.webView goForward];
 }
 
+//custom
 - (void)tapTitle:(id)sender
 {
     [self.webView reload];
@@ -1293,7 +1298,7 @@ BOOL isExiting = FALSE;
     theWebView.scrollView.contentInset = UIEdgeInsetsZero;
     
     [self.spinner stopAnimating];
-    
+    //custom
     UILabel *label = (UILabel *)self.navigationItem.titleView;
     label.text = [self.currentURL absoluteString];
     [label sizeToFit];
