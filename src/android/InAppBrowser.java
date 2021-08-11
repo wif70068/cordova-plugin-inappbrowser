@@ -960,7 +960,7 @@ public class InAppBrowser extends CordovaPlugin {
                 close.setLayoutParams(closeLayoutParams);
                 close.setContentDescription("Close Button");
                 close.setId(Integer.valueOf(7));
-                int closeResId = activityRes.getIdentifier("ic_action_remove", "drawable", cordova.getActivity().getPackageName());
+                int closeResId = activityRes.getIdentifier("ic_action_remove_white", "drawable", cordova.getActivity().getPackageName());
                 Drawable closeIcon = activityRes.getDrawable(closeResId);
                 close.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
                 if (Build.VERSION.SDK_INT >= 16)
@@ -972,7 +972,7 @@ public class InAppBrowser extends CordovaPlugin {
 
                 if (Build.VERSION.SDK_INT >= 16)
                     close.getAdjustViewBounds();
-                    
+
                 close.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
