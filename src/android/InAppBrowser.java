@@ -979,7 +979,7 @@ public class InAppBrowser extends CordovaPlugin {
                 int closeButtonId = 7;
                 ImageButton closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
                 closeButton.setContentDescription("Close Button");
-                closeButton.setPadding(0, this.doToPixels(10), 0, this.dpToPixels(10));
+                closeButton.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
                 closeButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         closeDialog();
