@@ -791,6 +791,27 @@ public class InAppBrowser extends CordovaPlugin {
                 return _close;
             }
 
+            private View createImageButton(int id, String res){
+                Resources activityRes = cordova.getActivity().getResources();
+
+                View button = new ImageButton(cordova.getActivity());
+                int resId = activityRes.getIdentifier(res, "drawable", cordova.getActivity().getPackageName());
+                Drawable resIcon = activityRes.getDrawable(closeResId);
+
+                button.setImageDrawable(resIcon);
+                button.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                if (Build.VERSION.SDK_INT >= 16){
+                    button.getAdjustViewBounds();
+                    button.setBackground(null);
+                }else{
+                    button.setBackgroundDrawable(null);
+                }
+                button.setId(Integer.valueOf(id));
+
+                return button;
+            }
+
             @SuppressLint("NewApi")
             public void run() {
 
@@ -954,67 +975,43 @@ public class InAppBrowser extends CordovaPlugin {
                 closeButtonContainer.setId(Integer.valueOf(5));
 
                 // Close/Done button
-                ImageButton close = new ImageButton(cordova.getActivity());
-                RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-                closeLayoutParams.addRule(RelativeLayout.RIGHT_OF, 8);
-                close.setLayoutParams(closeLayoutParams);
-                close.setContentDescription("Close Button");
-                close.setId(Integer.valueOf(7));
-                int closeResId = activityRes.getIdentifier("ic_action_remove_white", "drawable", cordova.getActivity().getPackageName());
-                Drawable closeIcon = activityRes.getDrawable(closeResId);
-                close.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
-                if (Build.VERSION.SDK_INT >= 16)
-                    close.setBackground(null);
-                else
-                    close.setBackgroundDrawable(null);
-                close.setImageDrawable(closeIcon);
-                close.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-                if (Build.VERSION.SDK_INT >= 16)
-                    close.getAdjustViewBounds();
-
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                int closeButtonId = 7;
+                View closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
+                closeButton.setContentDescription("Close Button");
+                closeButton.setPadding(0, this.doToPixels(10), 0, this.dpToPixels(10));
+                closeButton.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v){
                         closeDialog();
                     }
                 });
-
-
+                
                 // Share button
-                ImageButton share = new ImageButton(cordova.getActivity());
-                RelativeLayout.LayoutParams shareLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-                shareLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
-                share.setLayoutParams(shareLayoutParams);
-                share.setContentDescription("Share Button");
-                share.setId(Integer.valueOf(8));
-                int shareResId = activityRes.getIdentifier("ic_action_share", "drawable", cordova.getActivity().getPackageName());
-                Drawable shareIcon = activityRes.getDrawable(shareResId);
-                share.setPadding(5, this.dpToPixels(10), 5, this.dpToPixels(10));
-                if (Build.VERSION.SDK_INT >= 16)
-                    share.setBackground(null);
-                else
-                    share.setBackgroundDrawable(null);
-                share.setImageDrawable(shareIcon);
-                share.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                if (Build.VERSION.SDK_INT >= 16)
-                    share.getAdjustViewBounds();
-
-                share.setOnClickListener(new View.OnClickListener() {
+                int shareButtonId=8
+                View shareButton = createImageButton(shareButtonId, 'ic_action_share');
+                shareButton.setPadding(5, this.dpToPixels(10), 5, this.dpToPixels(10));
+                shareButton.setContentDescription("Share Button");
+                shareButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
                         String shareBody = inAppWebView.getUrl();
                         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, inAppWebView.getUrl());
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-
+                        
                         cordova.getActivity().startActivity(Intent.createChooser(sharingIntent, "URL 공유"));
                     }
                 });
+                
+                RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                closeLayoutParams.addRule(RelativeLayout.RIGHT_OF, shareButtonId);
+                closeButton.setLayoutParams(closeLayoutParans);
 
-                closeButtonContainer.addView(close);
-                closeButtonContainer.addView(share);
-
+                RelativeLayout.LayoutParams shareLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                shareLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
+                shareButton.setLayoutParams(shareLayoutParams);
+                    
+                closeButtonContainer.addView(closeButton);
+                closeButtonContainer.addView(shareButton);
 
                 // WebView
                 inAppWebView = new WebView(cordova.getActivity());
