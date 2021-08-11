@@ -1005,7 +1005,7 @@ public class InAppBrowser extends CordovaPlugin {
                 
                 RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
                 closeLayoutParams.addRule(RelativeLayout.RIGHT_OF, shareButtonId);
-                closeButton.setLayoutParams(closeLayoutParans);
+                closeButton.setLayoutParams(closeLayoutParams);
 
                 RelativeLayout.LayoutParams shareLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
                 shareLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
