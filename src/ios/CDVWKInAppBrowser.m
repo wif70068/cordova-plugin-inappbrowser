@@ -1395,12 +1395,7 @@ BOOL isExiting = FALSE;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    NSString* statusBarStylePreference = [self settingForKey:@"InAppBrowserStatusBarStyle"];
-    if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"lightcontent"]) {
-        return UIStatusBarStyleLightContent;
-    } else {
-        return UIStatusBarStyleDefault;
-    }
+    return UIStatusBarStyleLightContent;
 }
 
 @end
