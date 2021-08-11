@@ -987,7 +987,7 @@ public class InAppBrowser extends CordovaPlugin {
                 
                 // Share button
                 int shareButtonId=8;
-                View shareButton = createImageButton(shareButtonId, 'ic_action_share');
+                View shareButton = createImageButton(shareButtonId, "ic_action_share");
                 shareButton.setPadding(5, this.dpToPixels(10), 5, this.dpToPixels(10));
                 shareButton.setContentDescription("Share Button");
                 shareButton.setOnClickListener(new View.OnClickListener() {
