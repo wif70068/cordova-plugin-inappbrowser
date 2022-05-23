@@ -1097,8 +1097,7 @@ public class InAppBrowser extends CordovaPlugin {
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.gravity = Gravity.TOP;
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                int IntValue = (int) (80 * (displayMetrics.ydpi / displayMetrics.densityDpi));
-                lp.height = displayMetrics.heightPixels - statusBarHeight - actionBarHeight - this.dpToPixels(IntValue);
+                lp.height = displayMetrics.heightPixels - statusBarHeight - actionBarHeight - this.dpToPixels(80);
 
                 if (dialog != null) {
                     dialog.setContentView(main);
