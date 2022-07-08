@@ -58,6 +58,7 @@
 @property (nonatomic, strong) IBOutlet WKWebView* webView;
 @property (nonatomic, strong) IBOutlet WKWebViewConfiguration* configuration;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem* closeButton;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem* shareButton;
 @property (nonatomic, strong) IBOutlet UILabel* addressLabel;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem* backButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem* forwardButton;
@@ -71,10 +72,15 @@
 
 - (void)close;
 - (void)navigateTo:(NSURL*)url;
-- (void)showLocationBar:(BOOL)show;
-- (void)showToolBar:(BOOL)show : (NSString *) toolbarPosition;
+// - (void)showLocationBar:(BOOL)show;
+// - (void)showToolBar:(BOOL)show : (NSString *) toolbarPosition;
 - (void)setCloseButtonTitle:(NSString*)title : (NSString*) colorString : (int) buttonIndex;
+- (void)updateViews:(CDVInAppBrowserOptions*)browserOptions;
 
 - (id)initWithBrowserOptions: (CDVInAppBrowserOptions*) browserOptions andSettings:(NSDictionary*) settings;
+- (id)createNavigationViewContoller;
 
+@end
+
+@interface CDWKEmptyViewController: UIViewController
 @end

@@ -66,6 +66,19 @@
         <resource-file src="src/android/res/drawable-xhdpi/ic_action_remove.png" target="res/drawable-xhdpi/ic_action_remove.png" />
         <resource-file src="src/android/res/drawable-xxhdpi/ic_action_remove.png" target="res/drawable-xxhdpi/ic_action_remove.png" />
 
+        <resource-file src="src/android/res/drawable-hdpi/ic_action_share.png" target="res/drawable-hdpi/ic_action_share.png" />
+        <resource-file src="src/android/res/drawable-mdpi/ic_action_share.png" target="res/drawable-mdpi/ic_action_share.png" />
+        <resource-file src="src/android/res/drawable-xhdpi/ic_action_share.png" target="res/drawable-xhdpi/ic_action_share.png" />
+        <resource-file src="src/android/res/drawable-xxhdpi/ic_action_share.png" target="res/drawable-xxhdpi/ic_action_share.png" />
+
+
+        <resource-file src="src/android/res/drawable-hdpi/ic_action_remove_white.png" target="res/drawable-hdpi/ic_action_remove_white.png" />
+        <resource-file src="src/android/res/drawable-mdpi/ic_action_remove_white.png" target="res/drawable-mdpi/ic_action_remove_white.png" />
+        <resource-file src="src/android/res/drawable-xhdpi/ic_action_remove_white.png" target="res/drawable-xhdpi/ic_action_remove_white.png" />
+        <resource-file src="src/android/res/drawable-xxhdpi/ic_action_remove_white.png" target="res/drawable-xxhdpi/ic_action_remove_white.png" />
+
+
+
     </platform>
 
     <!-- ios -->
@@ -79,6 +92,12 @@
                 <param name="onload" value="true" />
             </feature>
         </config-file>
+
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+          <array>
+            <string>googlechrome</string>
+          </array>
+        </config-file>
         <header-file src="src/ios/CDVInAppBrowserOptions.h" />
         <source-file src="src/ios/CDVInAppBrowserOptions.m" />
         <header-file src="src/ios/CDVInAppBrowserNavigationController.h" />
@@ -87,6 +106,19 @@
 	    <source-file src="src/ios/CDVWKInAppBrowser.m" />
 	    <header-file src="src/ios/CDVWKInAppBrowserUIDelegate.h" />
 	    <source-file src="src/ios/CDVWKInAppBrowserUIDelegate.m" />
+
+        <header-file src="src/ios/SVWebViewControllerActivity.h" />
+        <header-file src="src/ios/SVWebViewControllerActivityChrome.h" />
+        <header-file src="src/ios/SVWebViewControllerActivitySafari.h" />
+        <source-file src="src/ios/SVWebViewControllerActivity.m" />
+        <source-file src="src/ios/SVWebViewControllerActivityChrome.m" />
+        <source-file src="src/ios/SVWebViewControllerActivitySafari.m" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivityChrome-iPad.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivityChrome-iPad@2x.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivityChrome@2x.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivitySafari-iPad.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivitySafari-iPad@2x.png" />
+        <resource-file src="src/ios/res/SVWebViewControllerActivitySafari@2x.png" />
 
 	    <framework src="CoreGraphics.framework" />
     </platform>

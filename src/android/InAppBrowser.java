@@ -20,6 +20,8 @@ package org.apache.cordova.inappbrowser;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -102,6 +104,11 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String CLEAR_SESSION_CACHE = "clearsessioncache";
     private static final String HARDWARE_BACK_BUTTON = "hardwareback";
     private static final String MEDIA_PLAYBACK_REQUIRES_USER_ACTION = "mediaPlaybackRequiresUserAction";
+    private static final String INTENT_PROTOCOL_START = "intent:";
+    private static final String INTENT_PROTOCOL_INTENT = "#Intent;";
+    private static final String INTENT_PROTOCOL_END = ";end;";
+    private static final String GOOGLE_PLAY_STORE_PREFIX = "market://details?id=";
+    private static final String HOGANGNONO_SCHEME = "hogangnono://";
     private static final String SHOULD_PAUSE = "shouldPauseOnSuspend";
     private static final Boolean DEFAULT_HARDWARE_BACK = true;
     private static final String USER_WIDE_VIEW_PORT = "useWideViewPort";
@@ -778,6 +785,28 @@ public class InAppBrowser extends CordovaPlugin {
                 return _close;
             }
 
+            private ImageButton createImageButton(int id, String res){
+
+                Resources activityRes = cordova.getActivity().getResources();
+
+                ImageButton button = new ImageButton(cordova.getActivity());
+                int resId = activityRes.getIdentifier(res, "drawable", cordova.getActivity().getPackageName());
+                Drawable resIcon = activityRes.getDrawable(resId);
+
+                button.setImageDrawable(resIcon);
+                button.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                if (Build.VERSION.SDK_INT >= 16){
+                    button.getAdjustViewBounds();
+                    button.setBackground(null);
+                }else{
+                    button.setBackgroundDrawable(null);
+                }
+                button.setId(Integer.valueOf(id));
+
+                return button;
+            }
+
             @SuppressLint("NewApi")
             public void run() {
 
@@ -875,11 +904,17 @@ public class InAppBrowser extends CordovaPlugin {
                 textLayoutParams.addRule(RelativeLayout.LEFT_OF, 5);
                 edittext.setLayoutParams(textLayoutParams);
                 edittext.setId(Integer.valueOf(4));
-                edittext.setSingleLine(true);
+                // edittext.setSingleLine(true);
+                edittext.setEnabled(false);
+
                 edittext.setText(url);
                 edittext.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
                 edittext.setImeOptions(EditorInfo.IME_ACTION_GO);
                 edittext.setInputType(InputType.TYPE_NULL); // Will not except input... Makes the text NON-EDITABLE
+                edittext.setTextSize(15);
+                edittext.setTextColor(android.graphics.Color.argb(150, 255,255,255));
+                edittext.setBackgroundColor(android.graphics.Color.argb(0,0,0,0));
+                edittext.setPadding(0, this.dpToPixels(10), this.dpToPixels(8), this.dpToPixels(10));
                 edittext.setOnKeyListener(new View.OnKeyListener() {
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         // If the event is a key-down event on the "enter" button
@@ -892,30 +927,79 @@ public class InAppBrowser extends CordovaPlugin {
                 });
 
 
-                // Header Close/Done button
-                int closeButtonId = leftToRight ? 1 : 5;
-                View close = createCloseButton(closeButtonId);
-                toolbar.addView(close);
+                // // Header Close/Done button
+                // int closeButtonId = leftToRight ? 1 : 5;
+                // View close = createCloseButton(closeButtonId);
+                // toolbar.addView(close);
 
-                // Footer
-                RelativeLayout footer = new RelativeLayout(cordova.getActivity());
-                int _footerColor;
-                if(footerColor != "") {
-                    _footerColor = Color.parseColor(footerColor);
-                } else {
-                    _footerColor = android.graphics.Color.LTGRAY;
-                }
-                footer.setBackgroundColor(_footerColor);
-                RelativeLayout.LayoutParams footerLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, this.dpToPixels(44));
-                footerLayout.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-                footer.setLayoutParams(footerLayout);
-                if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
-                footer.setHorizontalGravity(Gravity.LEFT);
-                footer.setVerticalGravity(Gravity.BOTTOM);
+                // // Footer
+                // RelativeLayout footer = new RelativeLayout(cordova.getActivity());
+                // int _footerColor;
+                // if(footerColor != "") {
+                //     _footerColor = Color.parseColor(footerColor);
+                // } else {
+                //     _footerColor = android.graphics.Color.LTGRAY;
+                // }
+                // footer.setBackgroundColor(_footerColor);
+                // RelativeLayout.LayoutParams footerLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, this.dpToPixels(44));
+                // footerLayout.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                // footer.setLayoutParams(footerLayout);
+                // if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
+                // footer.setHorizontalGravity(Gravity.LEFT);
+                // footer.setVerticalGravity(Gravity.BOTTOM);
 
-                View footerClose = createCloseButton(7);
-                footer.addView(footerClose);
+                // View footerClose = createCloseButton(7);
+                // footer.addView(footerClose);
 
+
+                // Action Button Container layout
+                RelativeLayout closeButtonContainer = new RelativeLayout(cordova.getActivity());
+                RelativeLayout.LayoutParams containerLayoutParmas = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                containerLayoutParmas.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                closeButtonContainer.setLayoutParams(containerLayoutParmas);
+                closeButtonContainer.setHorizontalGravity(Gravity.RIGHT);
+                closeButtonContainer.setVerticalGravity(Gravity.CENTER_VERTICAL);
+                closeButtonContainer.setId(Integer.valueOf(5));
+
+                // Close/Done button
+                int closeButtonId = 7;
+                ImageButton closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
+                closeButton.setContentDescription("Close Button");
+                closeButton.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
+                closeButton.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v){
+                        closeDialog();
+                    }
+                });
+                
+                // Share button
+                int shareButtonId=8;
+                ImageButton shareButton = createImageButton(shareButtonId, "ic_action_share");
+                shareButton.setPadding(5, this.dpToPixels(10), 5, this.dpToPixels(10));
+                shareButton.setContentDescription("Share Button");
+                shareButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        String shareBody = inAppWebView.getUrl();
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, inAppWebView.getUrl());
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        
+                        cordova.getActivity().startActivity(Intent.createChooser(sharingIntent, "URL 공유"));
+                    }
+                });
+                
+                RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                closeLayoutParams.addRule(RelativeLayout.RIGHT_OF, shareButtonId);
+                closeButton.setLayoutParams(closeLayoutParams);
+
+                RelativeLayout.LayoutParams shareLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+                shareLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
+                shareButton.setLayoutParams(shareLayoutParams);
+                    
+                
+                closeButtonContainer.addView((View)closeButton);
+                closeButtonContainer.addView((View)shareButton);
 
                 // WebView
                 inAppWebView = new WebView(cordova.getActivity());
@@ -1014,6 +1098,9 @@ public class InAppBrowser extends CordovaPlugin {
                 // Add the views to our toolbar if they haven't been disabled
                 if (!hideNavigationButtons) toolbar.addView(actionButtonContainer);
                 if (!hideUrlBar) toolbar.addView(edittext);
+                // Add the views to our toolbar
+                toolbar.addView(closeButtonContainer);
+
 
                 // Don't add the toolbar if its been disabled
                 if (getShowLocationBar()) {
@@ -1027,9 +1114,9 @@ public class InAppBrowser extends CordovaPlugin {
                 main.addView(webViewLayout);
 
                 // Don't add the footer unless it's been enabled
-                if (showFooter) {
-                    webViewLayout.addView(footer);
-                }
+                // if (showFooter) {
+                //     webViewLayout.addView(footer);
+                // }
 
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
@@ -1205,6 +1292,7 @@ public class InAppBrowser extends CordovaPlugin {
                 } catch (android.content.ActivityNotFoundException e) {
                     LOG.e(LOG_TAG, "Error dialing " + url + ": " + e.toString());
                 }
+            // [hogangnono] Make to install when use doesn't have app
             } else if (url.startsWith("geo:") || url.startsWith(WebView.SCHEME_MAILTO) || url.startsWith("market:") || url.startsWith("intent:")) {
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -1244,6 +1332,38 @@ public class InAppBrowser extends CordovaPlugin {
                     override = true;
                 } catch (android.content.ActivityNotFoundException e) {
                     LOG.e(LOG_TAG, "Error sending sms " + url + ":" + e.toString());
+                }
+            }
+            // Support hogangnono scheme
+            else if (url.startsWith(HOGANGNONO_SCHEME)) {
+                final String customUrl = url.substring(HOGANGNONO_SCHEME.length(), url.length());
+
+                try {
+                    cordova.getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(customUrl)));
+                } catch (ActivityNotFoundException e) {
+                    cordova.getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_PLAY_STORE_PREFIX + "com.hogangnono.hogangnono")));
+                }
+                return true;
+            }
+            // Supports Intent:// scheme. It usually used on above 4 version.
+            else if (url.startsWith(INTENT_PROTOCOL_START)) {
+                final int customUrlStartIndex = INTENT_PROTOCOL_START.length();
+                final int customUrlEndIndex = url.indexOf(INTENT_PROTOCOL_INTENT);
+                
+                if (customUrlEndIndex < 0) {
+                    return false;
+                } else {
+                    final String customUrl = url.substring(customUrlStartIndex, customUrlEndIndex);
+                    
+                    try {
+                        cordova.getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(customUrl)));
+                    } catch (ActivityNotFoundException e) {
+                        final int packageStartIndex = customUrlEndIndex + INTENT_PROTOCOL_INTENT.length();
+                        final int packageEndIndex = url.indexOf(INTENT_PROTOCOL_END);
+                        final String packageName = url.substring(packageStartIndex, packageEndIndex < 0 ? url.length() : packageEndIndex).replace("package=", "");
+                        cordova.getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_PLAY_STORE_PREFIX + packageName)));
+                    }
+                    return true;
                 }
             }
             // Test for whitelisted custom scheme names like mycoolapp:// or twitteroauthresponse:// (Twitter Oauth Response)
