@@ -12,7 +12,7 @@
 @implementation SVWebViewControllerActivitySafari
 
 - (NSString *)activityTitle {
-	return @"Safari에서 보기";
+	return @"Open Safari";
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {

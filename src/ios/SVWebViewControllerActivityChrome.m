@@ -11,7 +11,7 @@
 @implementation SVWebViewControllerActivityChrome
 
 - (NSString *)activityTitle {
-	return @"Chrome에서 보기";
+	return @"Open Chrome";
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
