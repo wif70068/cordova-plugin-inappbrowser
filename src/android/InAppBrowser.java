@@ -907,7 +907,21 @@ public class InAppBrowser extends CordovaPlugin {
                 // edittext.setSingleLine(true);
                 edittext.setEnabled(false);
 
-                edittext.setText(url);
+                   
+                try {
+                    URI uri = new URI(url);
+                    String domain = uri.getHost(); // Extract the domain from the URL
+                    if (domain != null) {
+                        // Removing any leading "www." from the domain
+                        if (domain.startsWith("www.")) {
+                            domain = domain.substring(4);
+                        }
+                        edittext.setText(domain); // Set the domain to the EditText
+                    }
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                    edittext.setText(url);
+                }
                 edittext.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
                 edittext.setImeOptions(EditorInfo.IME_ACTION_GO);
                 edittext.setInputType(InputType.TYPE_NULL); // Will not except input... Makes the text NON-EDITABLE
@@ -962,10 +976,10 @@ public class InAppBrowser extends CordovaPlugin {
                 closeButtonContainer.setId(Integer.valueOf(5));
 
                 // Close/Done button
-                int closeButtonId = 7;
+                int closeButtonId = leftToRight ? 1 : 7;
                 ImageButton closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
                 closeButton.setContentDescription("Close Button");
-                closeButton.setPadding(0, this.dpToPixels(10), 0, this.dpToPixels(10));
+                closeButton.setPadding(0, this.dpToPixels(15), 0, this.dpToPixels(15));
                 closeButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         closeDialog();
@@ -975,7 +989,7 @@ public class InAppBrowser extends CordovaPlugin {
                 // Share button
                 int shareButtonId=8;
                 ImageButton shareButton = createImageButton(shareButtonId, "ic_action_share");
-                shareButton.setPadding(5, this.dpToPixels(10), 5, this.dpToPixels(10));
+                shareButton.setPadding(5, this.dpToPixels(15), 5, this.dpToPixels(15));
                 shareButton.setContentDescription("Share Button");
                 shareButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
