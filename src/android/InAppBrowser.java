@@ -828,6 +828,20 @@ public class InAppBrowser extends CordovaPlugin {
                 dialog.setCancelable(true);
                 dialog.setInAppBroswer(getInAppBrowser());
 
+                dialog.getWindow().clearFlags(0x04000000); // SDK 19: WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                dialog.getWindow().addFlags(0x80000000); // SDK 21: WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+                View decorView = dialog.getWindow().getDecorView();
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+                try {
+                    // Using reflection makes sure any 5.0+ device will work without having to compile with SDK level 21
+                    dialog.getWindow().getClass().getMethod("setStatusBarColor", int.class)
+                            .invoke(dialog.getWindow(), toolbarColor);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 // Main container layout
                 LinearLayout main = new LinearLayout(cordova.getActivity());
                 main.setOrientation(LinearLayout.VERTICAL);
@@ -931,7 +945,7 @@ public class InAppBrowser extends CordovaPlugin {
                 edittext.setTextSize(17);
                 edittext.setTextColor(android.graphics.Color.argb(150, 255,255,255));
                 edittext.setBackgroundColor(android.graphics.Color.argb(0,0,0,0));
-                edittext.setPadding(10, this.dpToPixels(10), 10, this.dpToPixels(10));
+                edittext.setPadding(20, this.dpToPixels(10), 20, this.dpToPixels(10));
                 edittext.setOnKeyListener(new View.OnKeyListener() {
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         // If the event is a key-down event on the "enter" button
@@ -982,7 +996,7 @@ public class InAppBrowser extends CordovaPlugin {
                 int closeButtonId = 1;
                 ImageButton closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
                 closeButton.setContentDescription("Close Button");
-                closeButton.setPadding(15, this.dpToPixels(10), 15, this.dpToPixels(10));
+                closeButton.setPadding(20, this.dpToPixels(10), 20, this.dpToPixels(10));
                 closeButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         closeDialog();
@@ -990,9 +1004,9 @@ public class InAppBrowser extends CordovaPlugin {
                 });
                 
                 // Share button
-                int shareButtonId=8;
+                int shareButtonId = 8;
                 ImageButton shareButton = createImageButton(shareButtonId, "ic_action_share");
-                shareButton.setPadding(15, this.dpToPixels(10), 15, this.dpToPixels(10));
+                shareButton.setPadding(20, this.dpToPixels(10), 20, this.dpToPixels(10));
                 shareButton.setContentDescription("Share Button");
                 shareButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -1615,4 +1629,3 @@ public class InAppBrowser extends CordovaPlugin {
         }
     }
 }
-
