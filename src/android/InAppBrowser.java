@@ -85,6 +85,9 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @SuppressLint("SetJavaScriptEnabled")
 public class InAppBrowser extends CordovaPlugin {
 
@@ -925,10 +928,10 @@ public class InAppBrowser extends CordovaPlugin {
                 edittext.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
                 edittext.setImeOptions(EditorInfo.IME_ACTION_GO);
                 edittext.setInputType(InputType.TYPE_NULL); // Will not except input... Makes the text NON-EDITABLE
-                edittext.setTextSize(15);
+                edittext.setTextSize(17);
                 edittext.setTextColor(android.graphics.Color.argb(150, 255,255,255));
                 edittext.setBackgroundColor(android.graphics.Color.argb(0,0,0,0));
-                edittext.setPadding(0, this.dpToPixels(10), this.dpToPixels(8), this.dpToPixels(10));
+                edittext.setPadding(10, this.dpToPixels(10), 10, this.dpToPixels(10));
                 edittext.setOnKeyListener(new View.OnKeyListener() {
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
                         // If the event is a key-down event on the "enter" button
@@ -976,10 +979,10 @@ public class InAppBrowser extends CordovaPlugin {
                 closeButtonContainer.setId(Integer.valueOf(5));
 
                 // Close/Done button
-                int closeButtonId = leftToRight ? 1 : 7;
+                int closeButtonId = 1;
                 ImageButton closeButton = createImageButton(closeButtonId, "ic_action_remove_white");
                 closeButton.setContentDescription("Close Button");
-                closeButton.setPadding(0, this.dpToPixels(15), 0, this.dpToPixels(15));
+                closeButton.setPadding(15, this.dpToPixels(10), 15, this.dpToPixels(10));
                 closeButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         closeDialog();
@@ -989,7 +992,7 @@ public class InAppBrowser extends CordovaPlugin {
                 // Share button
                 int shareButtonId=8;
                 ImageButton shareButton = createImageButton(shareButtonId, "ic_action_share");
-                shareButton.setPadding(5, this.dpToPixels(15), 5, this.dpToPixels(15));
+                shareButton.setPadding(15, this.dpToPixels(10), 15, this.dpToPixels(10));
                 shareButton.setContentDescription("Share Button");
                 shareButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -1004,7 +1007,7 @@ public class InAppBrowser extends CordovaPlugin {
                 });
                 
                 RelativeLayout.LayoutParams closeLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-                closeLayoutParams.addRule(RelativeLayout.RIGHT_OF, shareButtonId);
+                closeLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
                 closeButton.setLayoutParams(closeLayoutParams);
 
                 RelativeLayout.LayoutParams shareLayoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
@@ -1012,7 +1015,7 @@ public class InAppBrowser extends CordovaPlugin {
                 shareButton.setLayoutParams(shareLayoutParams);
                     
                 
-                closeButtonContainer.addView((View)closeButton);
+                toolbar.addView((View)closeButton);
                 closeButtonContainer.addView((View)shareButton);
 
                 // WebView
@@ -1467,7 +1470,20 @@ public class InAppBrowser extends CordovaPlugin {
 
             // Update the UI if we haven't already
             if (!newloc.equals(edittext.getText().toString())) {
-                edittext.setText(newloc);
+                try {
+                    URI uri = new URI(newloc);
+                    String domain = uri.getHost(); // Extract the domain from the URL
+                    if (domain != null) {
+                        // Removing any leading "www." from the domain
+                        if (domain.startsWith("www.")) {
+                            domain = domain.substring(4);
+                        }
+                        edittext.setText(domain); // Set the domain to the EditText
+                    }
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                    edittext.setText(newloc);
+                }
             }
 
             try {
@@ -1599,3 +1615,4 @@ public class InAppBrowser extends CordovaPlugin {
         }
     }
 }
+
