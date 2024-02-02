@@ -845,7 +845,7 @@ BOOL isExiting = FALSE;
     self.spinner.userInteractionEnabled = NO;
     [self.spinner stopAnimating];
     
-    self.closeButton = [[UIBarButtonItem alloc] initWithTitle:@"닫기" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    self.closeButton = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     self.closeButton.enabled = YES;
     if (_browserOptions.navigationbuttoncolor != nil) { // Set button color if user sets it in options
       self.closeButton.tintColor = [self colorFromHexString:_browserOptions.navigationbuttoncolor];
@@ -962,7 +962,15 @@ BOOL isExiting = FALSE;
     [nav.navigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     
     if (_browserOptions.toolbarcolor != nil) {
-        nav.navigationBar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+        if (@available(iOS 13.0, *)) {
+            UINavigationBarAppearance* navBarAppearance = [self.navigationController.navigationBar standardAppearance];
+            [navBarAppearance configureWithOpaqueBackground];
+            navBarAppearance.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+            nav.navigationBar.standardAppearance = navBarAppearance;
+            nav.navigationBar.scrollEdgeAppearance = navBarAppearance;
+        } else {
+            nav.navigationBar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+        }
     }
     nav.modalPresentationStyle = self.modalPresentationStyle;
     nav.presentationController.delegate = self;
@@ -1234,7 +1242,16 @@ BOOL isExiting = FALSE;
     self.navigationController.navigationBar.shadowImage = image;
     [self.navigationController.navigationBar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     if (_browserOptions.toolbarcolor != nil) {
-        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+        if (@available(iOS 13.0, *)) {
+            UINavigationBarAppearance* navBarAppearance = [self.navigationController.navigationBar standardAppearance];
+            [navBarAppearance configureWithOpaqueBackground];
+            navBarAppearance.backgroundColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+            self.navigationController.navigationBar.standardAppearance = navBarAppearance;
+            self.navigationController.navigationBar.scrollEdgeAppearance = navBarAppearance;
+        } else {
+            self.navigationController.navigationBar.barTintColor = [self colorFromHexString:_browserOptions.toolbarcolor];
+        }
+        
     }
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -1243,7 +1260,7 @@ BOOL isExiting = FALSE;
     
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14], NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.45]};
     self.navigationItem.leftBarButtonItems = @[self.closeButton];
-    self.navigationItem.rightBarButtonItems = @[self.shareButton, self.forwardButton, fixedSpaceButton, self.backButton];
+    self.navigationItem.rightBarButtonItems = @[self.shareButton];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.textColor = [UIColor colorWithWhite:1.0 alpha:0.45];
@@ -1312,7 +1329,17 @@ BOOL isExiting = FALSE;
     [self.spinner stopAnimating];
     //custom
     UILabel *label = (UILabel *)self.navigationItem.titleView;
-    label.text = [self.currentURL absoluteString];
+
+    // Extract the domain from the URL
+    NSString *urlString = [self.currentURL absoluteString];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSString *domain = url.host;
+
+    // Remove "www." if it exists in the domain
+    domain = [domain stringByReplacingOccurrencesOfString:@"www." withString:@""];
+
+    // Set the domain as the text for the label
+    label.text = domain;
     [label sizeToFit];
 
     [self.navigationDelegate didFinishNavigation:theWebView];
